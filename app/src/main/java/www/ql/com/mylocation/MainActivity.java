@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
@@ -19,14 +19,20 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 
-public class MainActivity extends AppCompatActivity {
+import www.ql.com.mylocation.utils.LocationUtils;
+
+public class MainActivity extends BaseActivity {
     public static final int REQUEST_QUERY = 0x321;
+    double longitude;
+    double latitude;
+
     MapView mMapView = null;
     AMap aMap;
 
     MyLocationStyle myLocationStyle;
 
     Button btnQuery;
+    Button btnStart;
     private Marker mMarker;
 
 
@@ -35,10 +41,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnQuery = (Button) findViewById(R.id.btn_query);
+        btnStart = (Button) findViewById(R.id.btn_start);
+
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "启动成功", Toast.LENGTH_SHORT).show();
+                LocationUtils.startLocation(longitude,latitude);
+            }
+        });
         btnQuery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivityForResult(new Intent(MainActivity.this,QueryAty.class),REQUEST_QUERY);
             }
         });
         //获取地图控件引用
@@ -65,10 +80,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_QUERY) {
-            if (requestCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 Bundle bundle = data.getBundleExtra(C.addressBundle);
                 double latitude = bundle.getDouble(C.latitude);
                 double longitude = bundle.getDouble(C.longitude);
+                this.latitude = latitude;
+                this.longitude = longitude;
+                toLocation(longitude,latitude);
                 String city = bundle.getString(C.city);
                 String content = bundle.getString(C.content);
                 MarkerOptions a = setLocation(longitude, latitude, city, content);
@@ -76,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     mMarker.remove();
                 }
                 mMarker = showLocationAddress(a);
+                mMarker.showInfoWindow();
                 toLocation(longitude,latitude);
             }
         }
@@ -97,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         //设置希望展示的地图缩放级别
         mCameraUpdate = CameraUpdateFactory.zoomTo(17);
         aMap.animateCamera(mCameraUpdate);
+
     }
 
     /**

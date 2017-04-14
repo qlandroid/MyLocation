@@ -7,8 +7,9 @@ import www.ql.com.mylocation.MyApp;
  */
 public class LocationUtils {
 
-    public static  void startLocation(){
+    public static  void startLocation(double longitude, double latitude){
         LocationThread thread = LocationThread.getInstance(MyApp.myApp);
+        thread.setLocationAddress(longitude,latitude);
         if (!thread.isRun()){
             thread.start();
         }

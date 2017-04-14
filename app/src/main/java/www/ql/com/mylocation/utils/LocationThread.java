@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.SystemClock;
+import android.util.Log;
 
 /**
  * Created by Administrator on 2017-4-13.
@@ -18,7 +19,7 @@ public class LocationThread extends Thread {
     private LocationManager mLocationManager;
     private boolean isRun;
 
-    private long sleepTime = 300;
+    private long sleepTime = 100;
 
     private boolean isStop = false;
 
@@ -49,6 +50,7 @@ public class LocationThread extends Thread {
         super.run();
         isRun = true;
         while (!isStop) {
+            Log.i("mtag", "run:  正在已经设置虚拟位置"  +"--longitude="+mLongitude +"----latitude = " + mLatitude);
             mLocation.setLatitude(mLongitude);
             mLocation.setLongitude(mLatitude);
             mLocation.setTime(System.currentTimeMillis());

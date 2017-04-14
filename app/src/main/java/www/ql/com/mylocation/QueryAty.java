@@ -1,7 +1,8 @@
 package www.ql.com.mylocation;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -17,7 +18,7 @@ import java.util.List;
 
 import www.ql.com.mylocation.adapter.TextAdapter;
 
-public class QueryAty extends AppCompatActivity implements Inputtips.InputtipsListener {
+public class QueryAty extends BaseActivity implements Inputtips.InputtipsListener {
 
     private EditText etKeyWord, etCity;
     private ListView lv;
@@ -36,7 +37,6 @@ public class QueryAty extends AppCompatActivity implements Inputtips.InputtipsLi
 
         textAdapter = new TextAdapter(this, null, android.R.layout.simple_list_item_1);
         lv.setAdapter(textAdapter);
-        cityCode = etCity.getText().toString();
 
         etKeyWord.addTextChangedListener(new TextWatcher() {
             @Override
@@ -52,6 +52,7 @@ public class QueryAty extends AppCompatActivity implements Inputtips.InputtipsLi
             @Override
             public void afterTextChanged(Editable s) {
                 //第二个参数传入null或者“”代表在全国进行检索，否则按照传入的city进行检索
+                cityCode = etCity.getText().toString();
                 InputtipsQuery inputquery = new InputtipsQuery(s.toString(), cityCode);
                 Inputtips inputTips = new Inputtips(QueryAty.this, inputquery);
                 inputTips.setInputtipsListener(QueryAty.this);
@@ -63,7 +64,16 @@ public class QueryAty extends AppCompatActivity implements Inputtips.InputtipsLi
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Tip t = list.get(position);
-
+                double latitude = t.getPoint().getLatitude();
+                double longitude = t.getPoint().getLongitude();
+                Bundle bundle = new Bundle();
+                bundle.putDouble(C.latitude,latitude);
+                bundle.putDouble(C.longitude,longitude);
+                bundle.putString(C.content,t.getName());
+                Intent intent = new Intent();
+                intent.putExtra(C.addressBundle,bundle);
+                setResult(Activity.RESULT_OK,intent);
+                finish();
             }
         });
 
@@ -71,6 +81,7 @@ public class QueryAty extends AppCompatActivity implements Inputtips.InputtipsLi
 
     @Override
     public void onGetInputtips(List<Tip> list, int i) {
+        this.list = list;
         textAdapter.update(list);
     }
 }
