@@ -1,4 +1,4 @@
-package www.ql.com.mylocation;
+package cn.ql.location.change;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,20 +19,20 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 
-import www.ql.com.mylocation.utils.LocationUtils;
+import cn.ql.location.change.utils.LocationUtils;
 
 public class MainActivity extends BaseActivity {
     public static final int REQUEST_QUERY = 0x321;
-    double longitude;
-    double latitude;
+    private double mLongitude;
+    private double mLatitude;
 
     MapView mMapView = null;
-    AMap aMap;
+    AMap mAMap;
 
     MyLocationStyle myLocationStyle;
 
     Button btnQuery;
-    Button btnStart;
+    Button btnStart,btnStop,btnToLocation;
     private Marker mMarker;
 
 
@@ -42,12 +42,28 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         btnQuery = (Button) findViewById(R.id.btn_query);
         btnStart = (Button) findViewById(R.id.btn_start);
+        btnStop = (Button) findViewById(R.id.btn_stop);
+        btnToLocation = (Button) findViewById(R.id.btn_toLocation);
+
+        btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocationUtils.stop();
+            }
+        });
+
+        btnToLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toLocation(mLongitude, mLatitude);
+            }
+        });
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "启动成功", Toast.LENGTH_SHORT).show();
-                LocationUtils.startLocation(longitude,latitude);
+                LocationUtils.startLocation(mLongitude, mLatitude);
             }
         });
         btnQuery.setOnClickListener(new View.OnClickListener() {
@@ -61,20 +77,20 @@ public class MainActivity extends BaseActivity {
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mMapView.onCreate(savedInstanceState);
 
-        if (aMap == null) {
-            aMap = mMapView.getMap();
+        if (mAMap == null) {
+            mAMap = mMapView.getMap();
         }
         //设置显示图标，并定位自己的位置
         myLocationStyle = getLocationStyle();
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
+        mAMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
 
-        aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
-        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+        mAMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
+        mAMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
 
         // 绑定 Marker 被点击事件
-        aMap.setOnMarkerClickListener(markerClickListener);
+        mAMap.setOnMarkerClickListener(markerClickListener);
         // 绑定marker拖拽事件
-        aMap.setOnMarkerDragListener(markerDragListener);
+        mAMap.setOnMarkerDragListener(markerDragListener);
     }
 
     @Override
@@ -84,8 +100,8 @@ public class MainActivity extends BaseActivity {
                 Bundle bundle = data.getBundleExtra(C.addressBundle);
                 double latitude = bundle.getDouble(C.latitude);
                 double longitude = bundle.getDouble(C.longitude);
-                this.latitude = latitude;
-                this.longitude = longitude;
+                this.mLatitude = latitude;
+                this.mLongitude = longitude;
                 toLocation(longitude,latitude);
                 String city = bundle.getString(C.city);
                 String content = bundle.getString(C.content);
@@ -112,10 +128,10 @@ public class MainActivity extends BaseActivity {
         LatLng latLng = new LatLng(latitude, longitude);
         //参数依次是：视角调整区域的中心点坐标、希望调整到的缩放级别、俯仰角0°~45°（垂直与地图时为0）、偏航角 0~360° (正北方为0)
         CameraUpdate mCameraUpdate = CameraUpdateFactory.newCameraPosition(new CameraPosition(latLng, 18, 30, 0));
-        aMap.animateCamera(mCameraUpdate);
+        mAMap.moveCamera(mCameraUpdate);
         //设置希望展示的地图缩放级别
         mCameraUpdate = CameraUpdateFactory.zoomTo(17);
-        aMap.animateCamera(mCameraUpdate);
+        mAMap.moveCamera(mCameraUpdate);
 
     }
 
@@ -125,7 +141,7 @@ public class MainActivity extends BaseActivity {
      * @param markerOptions
      */
     private Marker showLocationAddress(MarkerOptions markerOptions) {
-        return aMap.addMarker(markerOptions);
+        return mAMap.addMarker(markerOptions);
     }
 
     /**

@@ -1,4 +1,4 @@
-package www.ql.com.mylocation.bean;
+package cn.ql.location.change.bean;
 
 /**
  * Created by Administrator on 2017-4-13.

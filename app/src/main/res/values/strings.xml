@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyLocation</string>
+    <string name="app_name">定位</string>
 
     <string name="cityCodeJson">[ {
     "pr" : "香港",

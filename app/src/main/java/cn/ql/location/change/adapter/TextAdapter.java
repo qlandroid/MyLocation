@@ -1,4 +1,4 @@
-package www.ql.com.mylocation.adapter;
+package cn.ql.location.change.adapter;
 
 import android.content.Context;
 

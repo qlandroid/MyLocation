@@ -1,10 +1,10 @@
-package www.ql.com.mylocation;
+package cn.ql.location.change;
 
 import org.junit.Test;
 
 import java.util.List;
 
-import www.ql.com.mylocation.bean.CityBean;
+import cn.ql.location.change.bean.CityBean;
 
 import static org.junit.Assert.*;
 

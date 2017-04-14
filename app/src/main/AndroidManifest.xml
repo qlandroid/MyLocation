@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="www.ql.com.mylocation">
+    package="cn.ql.location.change">
+
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 允许程序打开网络套接字 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,17 +21,17 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:name=".MyApp"
+        android:name="cn.ql.location.change.MyApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="3991287e162e3496d2e6c11cf033fe55" />
+            android:value="a4925d52a90871bed8df2025aabc10f7" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name="cn.ql.location.change.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,7 +41,8 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".QueryAty">
+        <activity android:name="cn.ql.location.change.QueryAty"></activity>
+        <activity android:name="cn.ql.location.change.ActionTestAty">
 
         </activity>
     </application>

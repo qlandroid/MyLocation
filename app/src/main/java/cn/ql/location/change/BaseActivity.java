@@ -1,4 +1,4 @@
-package www.ql.com.mylocation;
+package cn.ql.location.change;
 
 import android.support.v7.app.AppCompatActivity;
 

@@ -1,4 +1,4 @@
-package www.ql.com.mylocation;
+package cn.ql.location.change;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import com.amap.api.services.help.Tip;
 
 import java.util.List;
 
-import www.ql.com.mylocation.adapter.TextAdapter;
+import cn.ql.location.change.adapter.TextAdapter;
 
 public class QueryAty extends BaseActivity implements Inputtips.InputtipsListener {
 

@@ -1,4 +1,4 @@
-package www.ql.com.mylocation;
+package cn.ql.location.change;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import www.ql.com.mylocation.bean.CityBean;
+import cn.ql.location.change.bean.CityBean;
 
 /**
  * Created by Administrator on 2017-4-13.

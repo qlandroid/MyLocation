@@ -1,4 +1,4 @@
-package www.ql.com.mylocation;
+package cn.ql.location.change;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

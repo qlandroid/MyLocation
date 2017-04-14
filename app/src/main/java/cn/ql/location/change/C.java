@@ -1,10 +1,9 @@
-package www.ql.com.mylocation;
+package cn.ql.location.change;
 
 /**
  * Created by Administrator on 2017-4-13.
  */
 public class C {
-    //double longitude, double latitude
     public static final String longitude = "经度";
     public static final String latitude = "纬度";
 
