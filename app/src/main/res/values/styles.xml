@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="btnStyle">
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingLeft">6dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingRight">6dp</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>

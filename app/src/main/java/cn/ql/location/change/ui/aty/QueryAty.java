@@ -1,4 +1,4 @@
-package cn.ql.location.change;
+package cn.ql.location.change.ui.aty;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +16,9 @@ import com.amap.api.services.help.Tip;
 
 import java.util.List;
 
+import cn.ql.location.change.BaseActivity;
+import cn.ql.location.change.C;
+import cn.ql.location.change.R;
 import cn.ql.location.change.adapter.TextAdapter;
 
 public class QueryAty extends BaseActivity implements Inputtips.InputtipsListener {
@@ -82,6 +85,11 @@ public class QueryAty extends BaseActivity implements Inputtips.InputtipsListene
     @Override
     public void onGetInputtips(List<Tip> list, int i) {
         this.list = list;
-        textAdapter.update(list);
+        for (int j = 0; j < list.size();j++) {
+            if (this.list.get(j).getPoint() == null){
+                this.list.remove(j);
+            }
+        }
+        textAdapter.update(this.list);
     }
 }

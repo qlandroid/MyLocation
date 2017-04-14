@@ -1,6 +1,7 @@
-package cn.ql.location.change;
+package cn.ql.location.change.ui.aty;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -19,9 +20,14 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 
+import cn.ql.location.change.BaseActivity;
+import cn.ql.location.change.C;
+import cn.ql.location.change.R;
+import cn.ql.location.change.utils.DialogUtils;
 import cn.ql.location.change.utils.LocationUtils;
+import cn.ql.location.change.widget.dialog.OperateDialog;
 
-public class MainActivity extends BaseActivity {
+public class LocationAty extends BaseActivity {
     public static final int REQUEST_QUERY = 0x321;
     private double mLongitude;
     private double mLatitude;
@@ -32,14 +38,28 @@ public class MainActivity extends BaseActivity {
     MyLocationStyle myLocationStyle;
 
     Button btnQuery;
-    Button btnStart,btnStop,btnToLocation;
+    Button btnStart, btnStop, btnToLocation;
     private Marker mMarker;
 
+    private OperateDialog mOperateDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.aty_location);
+
+        mOperateDialog = DialogUtils.createOperateDialog(this, new OperateDialog.OnOperateClickListener() {
+            @Override
+            public void clickOperate() {
+                Intent intent = new Intent();
+                ComponentName comp = new ComponentName("com.android.settings", "com.android.settings.DevelopmentSettings");
+                intent.setComponent(comp);
+                intent.setAction("android.intent.action.VIEW");
+                startActivity(intent);
+
+            }
+        });
+
         btnQuery = (Button) findViewById(R.id.btn_query);
         btnStart = (Button) findViewById(R.id.btn_start);
         btnStop = (Button) findViewById(R.id.btn_stop);
@@ -62,14 +82,18 @@ public class MainActivity extends BaseActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "启动成功", Toast.LENGTH_SHORT).show();
-                LocationUtils.startLocation(mLongitude, mLatitude);
+                if (LocationUtils.isOpenSetting()) {
+                    Toast.makeText(LocationAty.this, "启动成功", Toast.LENGTH_SHORT).show();
+                    LocationUtils.startLocation(mLongitude, mLatitude);
+                }else {
+                    showOperateHintDialog();
+                }
             }
         });
         btnQuery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(MainActivity.this,QueryAty.class),REQUEST_QUERY);
+                startActivityForResult(new Intent(LocationAty.this, QueryAty.class), REQUEST_QUERY);
             }
         });
         //获取地图控件引用
@@ -102,21 +126,26 @@ public class MainActivity extends BaseActivity {
                 double longitude = bundle.getDouble(C.longitude);
                 this.mLatitude = latitude;
                 this.mLongitude = longitude;
-                toLocation(longitude,latitude);
+                toLocation(longitude, latitude);
                 String city = bundle.getString(C.city);
                 String content = bundle.getString(C.content);
                 MarkerOptions a = setLocation(longitude, latitude, city, content);
-                if (mMarker !=null){
+                if (mMarker != null) {
                     mMarker.remove();
                 }
                 mMarker = showLocationAddress(a);
                 mMarker.showInfoWindow();
-                toLocation(longitude,latitude);
+                toLocation(longitude, latitude);
             }
         }
     }
 
-
+    /**
+     * 显示设置操作步骤
+     */
+    private void showOperateHintDialog() {
+        mOperateDialog.show();
+    }
 
     /**
      * 获得焦点，显示在中心点，并放大
@@ -159,7 +188,7 @@ public class MainActivity extends BaseActivity {
         markerOption.position(latLng);
         markerOption.title(city).snippet(content);
 
-        markerOption.draggable(true);//设置Marker可拖动
+        markerOption.draggable(false);//设置Marker可拖动
         markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                 .decodeResource(getResources(), R.mipmap.my_location)));
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果

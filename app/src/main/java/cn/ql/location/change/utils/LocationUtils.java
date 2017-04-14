@@ -7,6 +7,7 @@ import android.location.LocationProvider;
 import android.os.Build;
 import android.provider.Settings;
 
+import cn.ql.location.change.C;
 import cn.ql.location.change.MyApp;
 
 /**
@@ -14,21 +15,38 @@ import cn.ql.location.change.MyApp;
  */
 public class LocationUtils {
 
-    public static void startLocation(double longitude, double latitude) {
-        LocationThread thread = LocationThread.getInstance(MyApp.myApp);
+    /**
+     * 用于启动 虚拟位置
+     *
+     * @param longitude 经度
+     * @param latitude  纬度
+     * @return 是否开启
+     */
+    public static boolean startLocation(double longitude, double latitude) {
+        boolean isUsesGPS = isUsesGPS();
+        boolean isUsesNetWork = isUsesNetWork();
+        boolean isPASSIVE_PROVIDER = isUsesPASSIVE_PROVIDER();
+        if (!(isUsesGPS || isUsesNetWork|| isPASSIVE_PROVIDER)) {
+            return false;
+        }
+        LocationThread thread = LocationThread.getInstance();
         thread.setLocationAddress(longitude, latitude);
+        thread.setIsUsesGPS(isUsesGPS);
+        thread.setIsUsesNetWork(isUsesNetWork);
+        thread.setIsUsesPASSIVE_PROVIDER(isPASSIVE_PROVIDER);
         if (!thread.isRun()) {
             thread.start();
         }
+        return true;
     }
 
     public static void setLocation(double longitude, double latitude) {
-        LocationThread thread = LocationThread.getInstance(MyApp.myApp);
+        LocationThread thread = LocationThread.getInstance();
         thread.setLocationAddress(longitude, latitude);
     }
 
     public static void stop() {
-        LocationThread thread = LocationThread.getInstance(MyApp.myApp);
+        LocationThread thread = LocationThread.getInstance();
         thread.setStop();
     }
 
@@ -75,5 +93,17 @@ public class LocationUtils {
             }
         }
         return canMockPosition;
+    }
+
+    public static boolean isUsesNetWork() {
+        return C.sLocationManger.isProviderEnabled(LocationManager.NETWORK_PROVIDER);//判断指定提供程序是否能用
+    }
+
+    public static boolean isUsesGPS() {
+        return C.sLocationManger.isProviderEnabled(LocationManager.GPS_PROVIDER);//判断指定提供程序是否能用
+    }
+
+    public static boolean isUsesPASSIVE_PROVIDER(){
+        return C.sLocationManger.isProviderEnabled(LocationManager.PASSIVE_PROVIDER);
     }
 }

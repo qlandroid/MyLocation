@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.ql.location.change.MainActivity">
+    tools:context=".ui.aty.LocationAty">
 
     <HorizontalScrollView
         android:layout_width="match_parent"

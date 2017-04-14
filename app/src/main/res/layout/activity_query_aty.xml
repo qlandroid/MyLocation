@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.ql.location.change.QueryAty">
+    tools:context=".ui.aty.QueryAty">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

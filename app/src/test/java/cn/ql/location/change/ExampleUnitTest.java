@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.List;
 
 import cn.ql.location.change.bean.CityBean;
+import cn.ql.location.change.utils.DataUtils;
 
 import static org.junit.Assert.*;
 

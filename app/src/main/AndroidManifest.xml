@@ -31,7 +31,7 @@
             android:name="com.amap.api.v2.apikey"
             android:value="a4925d52a90871bed8df2025aabc10f7" />
 
-        <activity android:name="cn.ql.location.change.MainActivity">
+        <activity android:name=".ui.aty.LocationAty">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,7 +41,7 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name="cn.ql.location.change.QueryAty"></activity>
+        <activity android:name=".ui.aty.QueryAty"></activity>
         <activity android:name="cn.ql.location.change.ActionTestAty">
 
         </activity>
